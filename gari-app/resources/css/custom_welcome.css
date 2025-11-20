@@ -1,0 +1,255 @@
+:root {
+    --color-primary: #FFD700; /* Gold/Yellow for highlights */
+    --color-secondary: #1a1a2e; /* Deep Navy/Black for background */
+    --color-text: #ffffff;
+    --color-accent: #2c73ff; /* Blue for Customer CTA */
+    --color-vendor: #4CAF50; /* Green for Vendor CTA */
+    --color-admin: #DA1E37; /* NEW COLOR for Admin CTA */
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-secondary);
+}
+
+/* --- HERO/LAYOUT STYLES --- */
+
+.hero-bg {
+    /* Background image source is set in the HTML via style attribute */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    /* Reduced opacity (0.55) for visible background image */
+    background-color: rgba(0, 0, 0, 0.55); 
+    backdrop-filter: blur(1px); 
+}
+
+/* Style for the Landing Page content box (wide) */
+.content-box {
+    position: relative;
+    z-index: 10;
+    padding: 40px;
+    max-width: 900px;
+    width: 90%;
+    margin: 20px auto;
+    background-color: rgba(26, 26, 46, 0.95); 
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    border-top: 3px solid var(--color-primary);
+}
+
+/* Style for Registration/Login forms (narrower) */
+.content-box-small {
+    position: relative;
+    z-index: 10;
+    padding: 30px;
+    max-width: 500px; /* Narrower width for forms */
+    width: 90%;
+    margin: 20px auto;
+    background-color: rgba(26, 26, 46, 0.98); /* Less transparent for forms */
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    text-align: left; /* Left alignment for form fields */
+    border-top: 3px solid var(--color-primary);
+}
+
+
+/* --- TEXT/HEADING STYLES (Used by both Landing Page and Forms) --- */
+
+h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: var(--color-text);
+}
+
+.platform-name {
+    color: var(--color-primary);
+    font-size: 1.1em;
+}
+
+.tagline {
+    font-size: 1.5rem;
+    font-weight: 300;
+    margin-bottom: 30px;
+    color: #ccc;
+}
+
+.description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 40px;
+    color: #ddd;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: var(--color-primary);
+}
+
+
+/* --- FORM ELEMENT STYLES (Crucial for visibility!) --- */
+
+.form-group {
+    margin-bottom: 15px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #ddd; 
+    font-size: 1.1em;
+}
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #444;
+    background-color: #2a2a40; /* Dark input background */
+    color: #fff; /* White input text */
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+.form-group input:focus {
+    border-color: var(--color-primary); /* Yellow border on focus */
+    outline: none;
+}
+.error {
+    color: #FF5733; /* Bright red for error messages */
+    font-size: 0.9em;
+    display: block;
+    margin-top: 5px;
+}
+
+
+/* --- CTA GRID/CARD STYLES (Landing Page Only) --- */
+
+.cta-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+@media (max-width: 768px) {
+    .cta-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.cta-card {
+    padding: 25px;
+    background-color: var(--color-secondary);
+    border-radius: 8px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid #333;
+}
+
+.cta-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+}
+
+.cta-card p {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: var(--color-text);
+}
+
+
+/* --- BUTTON STYLING --- */
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 12px 0;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+    margin-bottom: 10px;
+    cursor: pointer;
+    border: none; /* Remove default button border */
+}
+
+.btn-primary {
+    background-color: var(--color-accent);
+    color: var(--color-text);
+}
+.btn-primary:hover {
+    background-color: #205ac6;
+}
+
+.btn-vendor {
+    background-color: var(--color-vendor);
+    color: var(--color-text);
+}
+.btn-vendor:hover {
+    background-color: #3b8e3e;
+}
+
+.btn-admin {
+    background-color: var(--color-admin);
+    color: var(--color-text);
+}
+.btn-admin:hover {
+    background-color: #b8172c;
+}
+
+/* --- SECONDARY LINKS --- */
+
+.link-secondary {
+    display: block;
+    color: #aaa;
+    font-weight: 400;
+    margin-top: 5px;
+    padding: 5px 0;
+    text-decoration: none;
+    transition: color 0.3s, background-color 0.3s;
+}
+.link-secondary:hover {
+    color: var(--color-text);
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.link-secondary-vendor {
+    display: block;
+    color: #ccffcc;
+    font-weight: 500;
+    margin-top: 5px;
+    padding: 5px 0;
+    text-decoration: none;
+    transition: color 0.3s, background-color 0.3s;
+}
+
+.link-secondary-vendor:hover {
+    color: var(--color-text);
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+/* Small Text (Admin Card) */
+.small-text {
+    font-size: 0.9rem;
+    color: #999;
+    margin-top: 10px;
+}
