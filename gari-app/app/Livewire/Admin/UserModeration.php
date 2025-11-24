@@ -3,77 +3,55 @@
 namespace App\Livewire\Admin;
 
 use Livewire\Component;
-use Livewire\WithPagination; // 1. Import Pagination
-use App\Models\Vendor;
+use Livewire\WithPagination; // 1. Import
+use App\Models\User;
 use Carbon\Carbon;
 
-class VendorApproval extends Component
+class UserModeration extends Component
 {
-    use WithPagination; // 2. Use it
+    use WithPagination; // 2. Use
 
-    public $statusMessage = '';
-    public $search = ''; // 3. Add Search State
-    
-    // Suspension Modal State
+    public $search = '';
+
+    // Suspension State
     public $confirmingSuspension = false;
-    public $vendorToSuspendId = null;
-    public $vendorToSuspendName = '';
+    public $userToSuspendId = null;
+    public $userToSuspendName = '';
     public $suspensionDuration = 7;
 
-    // Reset pagination when searching
     public function updatedSearch()
     {
         $this->resetPage();
     }
 
-    public function approve($vendorId)
+    public function confirmSuspension($userId)
     {
-        Vendor::find($vendorId)->update([
-            'status' => 'approved', 
-            'approved_at' => Carbon::now(),
-            'suspended_until' => null
-        ]);
-        $this->statusMessage = "Vendor approved successfully.";
-    }
-
-    public function reject($vendorId)
-    {
-        Vendor::find($vendorId)->update(['status' => 'rejected']);
-        $this->statusMessage = "Vendor application rejected.";
-    }
-
-    public function confirmSuspension($vendorId)
-    {
-        $vendor = Vendor::find($vendorId);
-        $this->vendorToSuspendId = $vendor->id;
-        $this->vendorToSuspendName = $vendor->owner_name;
-        $this->confirmingSuspension = true;
-        $this->suspensionDuration = 7; 
-    }
-
-    public function suspendVendor()
-    {
-        if ($this->vendorToSuspendId) {
-            $days = (int) $this->suspensionDuration;
-            $date = $days === -1 ? Carbon::now()->addYears(100) : Carbon::now()->addDays($days);
-
-            Vendor::find($this->vendorToSuspendId)->update([
-                'status' => 'suspended', 
-                'suspended_until' => $date
-            ]);
-
-            $this->confirmingSuspension = false;
-            session()->flash('message', "Vendor suspended until " . $date->format('M d, Y'));
+        $user = User::find($userId);
+        if ($user && $user->role !== 'admin') {
+            $this->userToSuspendId = $user->id;
+            $this->userToSuspendName = $user->name;
+            $this->confirmingSuspension = true;
+            $this->suspensionDuration = 7; 
         }
     }
 
-    public function unsuspendVendor($vendorId)
+    public function suspendUser()
     {
-        Vendor::find($vendorId)->update([
-            'status' => 'approved', 
-            'suspended_until' => null
-        ]);
-        session()->flash('message', "Vendor reactivated.");
+        if ($this->userToSuspendId) {
+            $days = (int) $this->suspensionDuration;
+            $date = $days === -1 ? Carbon::now()->addYears(100) : Carbon::now()->addDays($days);
+
+            User::find($this->userToSuspendId)->update(['suspended_until' => $date]);
+
+            $this->confirmingSuspension = false;
+            session()->flash('message', "User suspended until " . $date->format('M d, Y'));
+        }
+    }
+
+    public function unsuspendUser($userId)
+    {
+        User::find($userId)->update(['suspended_until' => null]);
+        session()->flash('message', "User access restored.");
     }
 
     public function cancelSuspension()
@@ -83,19 +61,11 @@ class VendorApproval extends Component
 
     public function render()
     {
-        // Query for Active Vendors with Search
-        $approvedVendors = Vendor::whereIn('status', ['approved', 'suspended'])
-            ->where(function($query) {
-                $query->where('owner_name', 'like', '%'.$this->search.'%')
-                      ->orWhere('shop_description', 'like', '%'.$this->search.'%')
-                      ->orWhere('email', 'like', '%'.$this->search.'%');
-            })
-            ->orderBy('approved_at', 'desc')
-            ->paginate(10); // 4. Paginate results
+        $users = User::where('role', 'customer')
+                     ->where('name', 'like', '%'.$this->search.'%')
+                     ->orderBy('created_at', 'desc')
+                     ->paginate(10); // 3. Paginate
 
-        return view('admin.vendor-approval', [
-            'pendingVendors' => Vendor::where('status', 'pending_approval')->orderBy('created_at', 'desc')->get(),
-            'approvedVendors' => $approvedVendors
-        ]);
+        return view('admin.user-moderation', ['users' => $users]);
     }
 }
