@@ -4,7 +4,12 @@
     --color-text: #ffffff;
     --color-accent: #2c73ff; /* Blue for Customer CTA */
     --color-vendor: #4CAF50; /* Green for Vendor CTA */
-    --color-admin: #C70512; /* NEW COLOR for Admin CTA */
+    --color-admin: #DA1E37; /* Red for Admin CTA */
+    
+    /* Content Box Backgrounds */
+    --color-card-bg: rgba(26, 26, 46, 0.95); 
+    --color-input-bg: #2a2a40;
+    --color-border: #444;
 }
 
 body {
@@ -12,48 +17,80 @@ body {
     margin: 0;
     padding: 0;
     background-color: var(--color-secondary);
+    color: var(--color-text);
 }
 
+/* =========================================
+   HERO & LAYOUT STYLES
+   ========================================= */
+
 .hero-bg {
-    /* Background image source is set in the HTML via style attribute */
+    /* Background image is defined inline in the Blade layout */
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
     min-height: 100vh;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: center; /* Centers content vertically */
+    justify-content: center; /* Centers content horizontally */
     position: relative;
 }
 
 .overlay {
     position: absolute;
     inset: 0;
-    /* Reduced opacity (0.55) to allow the custom background image to show more */
     background-color: rgba(0, 0, 0, 0.55); 
     backdrop-filter: blur(1px); 
 }
 
+/* --- Content Containers --- */
+
+/* Wide box: Used for Dashboard and Welcome Page */
 .content-box {
     position: relative;
     z-index: 10;
     padding: 40px;
-    max-width: 900px;
+    max-width: 900px; /* Wider width */
     width: 90%;
     margin: 20px auto;
-    /* Slightly translucent secondary color for the content box */
-    background-color: rgba(26, 26, 46, 0.95); 
+    background-color: var(--color-card-bg); 
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     text-align: center;
     border-top: 3px solid var(--color-primary);
 }
 
+/* Narrow box: Used for Login and Registration Forms */
+.content-box-small {
+    position: relative;
+    z-index: 10;
+    padding: 30px;
+    max-width: 500px; /* Narrower width */
+    width: 90%;
+    margin: 20px auto;
+    background-color: var(--color-card-bg); 
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    text-align: left; 
+    border-top: 3px solid var(--color-primary);
+}
+
+/* =========================================
+   TYPOGRAPHY
+   ========================================= */
+
 h1 {
     font-size: 3.5rem;
     font-weight: 800;
     margin-bottom: 10px;
     color: var(--color-text);
+}
+
+h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: var(--color-primary);
 }
 
 .platform-name {
@@ -78,24 +115,212 @@ h1 {
     margin-right: auto;
 }
 
-h2 {
-    font-size: 2rem;
-    font-weight: 600;
-    margin-bottom: 30px;
+/* =========================================
+   DASHBOARD SPECIFIC STYLES
+   ========================================= */
+
+.dashboard-heading {
     color: var(--color-primary);
+    font-size: 1.8rem;
+    margin: 0; /* Reset margin for alignment */
 }
+
+/* Header Row inside the dashboard card */
+.dashboard-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 15px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Search Form Styles */
+.search-form {
+    margin-bottom: 25px;
+}
+
+.form-group-inline {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+/* Results Section */
+.results-heading {
+    text-align: left;
+    font-size: 1.4rem;
+    color: #fff;
+    margin-top: 20px;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 10px;
+}
+
+.no-results-text {
+    color: #aaa;
+    margin-top: 15px;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Results Table Styling */
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    color: #fff;
+    text-align: left;
+}
+
+.results-table th {
+    padding: 10px;
+    border-bottom: 2px solid var(--color-primary);
+    color: var(--color-primary);
+    font-size: 1.1rem;
+}
+
+.results-table td {
+    padding: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ddd;
+}
+
+.results-table td:last-child {
+    text-align: center;
+}
+
+/* =========================================
+   FORM ELEMENTS
+   ========================================= */
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #ddd;
+    font-size: 1.1em;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-input-bg);
+    color: #fff;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+    font-size: 1em;
+}
+
+/* Specific fix for select dropdowns to match inputs */
+select {
+    appearance: none; /* Removes default browser styling */
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 1em;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--color-primary);
+    outline: none;
+}
+
+.error {
+    color: #FF5733;
+    font-size: 0.9em;
+    display: block;
+    margin-top: 5px;
+}
+
+/* =========================================
+   BUTTONS
+   ========================================= */
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 12px 0;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+    margin-bottom: 10px;
+    cursor: pointer;
+    border: none;
+    text-align: center;
+    color: #fff;
+}
+
+/* Small buttons used in headers */
+.btn-small {
+    width: auto;
+    padding: 8px 15px;
+    font-size: 0.9em;
+    margin-bottom: 0;
+}
+
+/* Button Variants */
+.btn-primary {
+    background-color: var(--color-accent);
+}
+.btn-primary:hover {
+    background-color: #205ac6;
+}
+
+.btn-vendor {
+    background-color: var(--color-vendor);
+}
+.btn-vendor:hover {
+    background-color: #3b8e3e;
+}
+
+.btn-admin {
+    background-color: var(--color-admin);
+}
+.btn-admin:hover {
+    background-color: #b8172c;
+}
+
+.btn-logout {
+    background-color: var(--color-admin);
+}
+.btn-logout:hover {
+    background-color: #b8172c;
+}
+
+.btn-profile {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.btn-profile:hover {
+    background-color: var(--color-primary);
+    color: #000;
+}
+
+/* =========================================
+   LANDING PAGE CARDS
+   ========================================= */
 
 .cta-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
-}
-
-/* Responsive adjustment for smaller screens */
-@media (max-width: 768px) {
-    .cta-grid {
-        grid-template-columns: 1fr;
-    }
 }
 
 .cta-card {
@@ -118,46 +343,20 @@ h2 {
     color: var(--color-text);
 }
 
-/* --- CTA Button Styling (Primary Action) --- */
-.btn {
-    display: block;
-    width: 100%;
-    padding: 12px 0;
-    border-radius: 6px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: background-color 0.3s, color 0.3s;
-    margin-bottom: 10px;
+/* Responsive adjustment */
+@media (max-width: 768px) {
+    .cta-grid {
+        grid-template-columns: 1fr;
+    }
+    .form-group-inline {
+        flex-direction: column;
+    }
 }
 
-/* Customer Primary Button (Blue) */
-.btn-primary {
-    background-color: var(--color-accent);
-    color: var(--color-text);
-}
-.btn-primary:hover {
-    background-color: #205ac6;
-}
+/* =========================================
+   UTILITIES
+   ========================================= */
 
-/* Vendor Primary Button (Green) */
-.btn-vendor {
-    background-color: var(--color-vendor);
-    color: var(--color-text);
-}
-.btn-vendor:hover {
-    background-color: #3b8e3e;
-}
-
-/* Admin/Sign-in Button (Custom Red: #DA1E37) */
-.btn-admin {
-    background-color: var(--color-admin);
-    color: var(--color-text);
-}
-.btn-admin:hover {
-    background-color: #b8172c; /* Slightly darker shade for hover effect */
-}
-
-/* --- Secondary Sign In Link (Customer Card) --- */
 .link-secondary {
     display: block;
     color: #aaa;
@@ -173,74 +372,32 @@ h2 {
     border-radius: 4px;
 }
 
-/* --- Secondary Sign In Link (Vendor Card) --- */
 .link-secondary-vendor {
     display: block;
-    color: #ccffcc; /* Lighter color for better contrast on green/dark background */
+    color: #ccffcc;
     font-weight: 500;
     margin-top: 5px;
     padding: 5px 0;
     text-decoration: none;
     transition: color 0.3s, background-color 0.3s;
 }
-
 .link-secondary-vendor:hover {
     color: var(--color-text);
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 4px;
 }
 
-/* Small Text (Admin Card) */
 .small-text {
     font-size: 0.9rem;
     color: #999;
     margin-top: 10px;
 }
 
-.content-box-small {
-    position: relative;
-    z-index: 10;
-    padding: 30px;
-    max-width: 500px; /* Smaller max width for forms */
-    width: 90%;
-    margin: 20px auto;
-    background-color: rgba(26, 26, 46, 0.98); /* Less transparent for forms */
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-    text-align: left; /* Text alignment for form fields */
-    border-top: 3px solid var(--color-primary);
-}
-/* --- FORM ELEMENT STYLES (Crucial for visibility!) --- */
-
-.form-group {
-    margin-bottom: 15px;
-}
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 500;
-    color: #ddd; /* Ensures label text is visible */
-    font-size: 1.1em;
-}
-.form-group input,
-.form-group textarea { /* Style for all input fields and text areas */
-    width: 100%;
+.alert-success {
+    background-color: #3b8e3e;
+    color: #fff;
     padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #444;
-    background-color: #2a2a40; /* Dark input background */
-    color: #fff; /* White input text */
-    box-sizing: border-box;
-    transition: border-color 0.3s;
-}
-.form-group input:focus,
-.form-group textarea:focus {
-    border-color: var(--color-primary); /* Yellow border on focus */
-    outline: none;
-}
-.error {
-    color: #FF5733; /* Bright red for error messages */
-    font-size: 0.9em;
-    display: block;
-    margin-top: 5px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    text-align: center;
 }

@@ -6,97 +6,114 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;      
-use App\Models\Vendor;    
+use App\Models\User;
+use App\Models\Vendor;
 
 class LoginController extends Controller
 {
-    // Show the generic login form (for Customer/Admin)
-    public function create()
-    {
+    public function create() { 
         return view('auth.login')->layout('layouts.app'); 
     }
 
-    // 🔑 NEW METHOD: Show the Vendor-specific login form
-    public function createVendor()
-    {
-        return view('auth.vendor_login')->layout('layouts.app');
+    public function createVendor() { 
+        return view('auth.vendor_login')->layout('layouts.app'); 
     }
 
-    // Handle authentication attempt for all user types
+    public function createAdmin() { 
+        return view('auth.admin_login')->layout('layouts.app'); 
+    }
+
     public function store(Request $request)
     {
-        // 🔑 Validate using unique 'email' address
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
 
-        // ----------------------------------------
-        // 1. ATTEMPT CUSTOMER/ADMIN LOGIN (Users Table)
-        // ----------------------------------------
+        /**
+         * -----------------------------------------------------
+         * 1. CUSTOMER / ADMIN LOGIN
+         * -----------------------------------------------------
+         */
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
 
-            if ($user->role === 'customer') {
-                $request->session()->regenerate();
-                return redirect()->route('customer.dashboard');
+            // Suspension check
+            if ($user->suspended_until && $user->suspended_until->isFuture()) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return back()->withErrors([
+                    'email' => 'Your account is suspended until ' . 
+                               $user->suspended_until->format('M d, Y H:i'),
+                ])->onlyInput('email');
             }
-            
+
+            // Successful login → regenerate session
+            $request->session()->regenerate();
+
+            // Role-based dashboard redirect
             if ($user->role === 'admin') {
-                $request->session()->regenerate();
-                return redirect()->route('admin.dashboard'); // Will be implemented next
+                return redirect()->route('admin.dashboard');
             }
+
+            return redirect()->route('customer.dashboard');
         }
-        
-        // ----------------------------------------
-        // 2. ATTEMPT VENDOR LOGIN (Vendors Table)
-        // ----------------------------------------
+
+        /**
+         * -----------------------------------------------------
+         * 2. VENDOR LOGIN
+         * -----------------------------------------------------
+         */
         $vendor = Vendor::where('email', $credentials['email'])->first();
 
         if ($vendor) {
-            
-            // 2a. Check Vendor Status (Must be Approved)
-            if ($vendor->status !== 'approved') {
-                $status_message = str_replace('_', ' ', $vendor->status);
-                
+
+            // Vendor suspension
+            if ($vendor->suspended_until && $vendor->suspended_until->isFuture()) {
                 return back()->withErrors([
-                    'email' => "Your vendor account status is: **{$status_message}**. Please await admin approval.",
+                    'email' => 'Your shop is suspended until ' . 
+                               $vendor->suspended_until->format('M d, Y H:i'),
                 ])->onlyInput('email');
             }
-            
-            // 2b. Check Vendor Password and log them in
+
+            // Vendor approval
+            if ($vendor->status !== 'approved') {
+                return back()->withErrors([
+                    'email' => "Your vendor account status is: {$vendor->status}. Please await admin approval.",
+                ])->onlyInput('email');
+            }
+
+            // Vendor password check
             if (Hash::check($credentials['password'], $vendor->password)) {
-                
-                // Log in the Vendor (using the default 'web' guard)
-                Auth::login($vendor); 
+                Auth::login($vendor);
                 $request->session()->regenerate();
-                
-                return redirect()->route('vendor.dashboard'); // Placeholder route
+
+                return redirect()->route('vendor.dashboard');
             }
         }
 
-        // ----------------------------------------
-        // 3. FAILED LOGIN
-        // ----------------------------------------
+        /**
+         * -----------------------------------------------------
+         * 3. FAILED LOGIN
+         * -----------------------------------------------------
+         */
         return back()->withErrors([
             'email' => 'The provided credentials do not match any active account.',
         ])->onlyInput('email');
     }
 
-    // Handle user logout
+    /**
+     * -----------------------------------------------------
+     * LOGOUT
+     * -----------------------------------------------------
+     */
     public function destroy(Request $request)
     {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
         return redirect('/');
-    }
-    
-    public function createAdmin()
-    {
-        // We will create this specific view file next
-        return view('auth.admin_login')->layout('layouts.app'); 
     }
 }
