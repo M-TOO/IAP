@@ -16,6 +16,8 @@
     
     <form method="POST" action="{{ route('login.store') }}">
         @csrf
+
+        <input type="hidden" name="login_type" value="vendor">
         
         <div class="form-group">
             <label for="email">Email Address</label>
@@ -36,4 +38,10 @@
         Not registered yet? 
         <a href="{{ route('vendor.register') }}" style="color: var(--color-vendor);">Create Shop Account</a>
     </p>
+
+    <div style="text-align: center; margin-top: 15px;">
+        <a href="{{ url('/') }}" style="text-decoration: none; color: #666;">
+            &larr; Back to Home
+        </a>
+    </div>
 @endsection

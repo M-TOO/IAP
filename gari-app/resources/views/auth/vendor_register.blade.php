@@ -72,4 +72,10 @@
         Already registered? 
         <a href="{{ route('vendor.login') }}" style="color: var(--color-vendor);">Sign In</a>
     </p>
+
+    <div style="text-align: center; margin-top: 15px;">
+        <a href="{{ url('/') }}" style="text-decoration: none; color: #666;">
+            &larr; Back to Home
+        </a>
+    </div>
 @endsection

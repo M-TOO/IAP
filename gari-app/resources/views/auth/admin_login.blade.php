@@ -14,6 +14,8 @@
     <form method="POST" action="{{ route('login.store') }}">
         @csrf
         
+        <input type="hidden" name="login_type" value="admin">
+        
         <div class="form-group">
             <label for="email">Email Address</label>
             <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus>
@@ -32,4 +34,10 @@
     <p class="small-text" style="text-align: center; margin-top: 20px;">
         This portal is for system administrators only.
     </p>
+
+    <div style="text-align: center; margin-top: 15px;">
+        <a href="{{ url('/') }}" style="text-decoration: none; color: #666;">
+            &larr; Back to Home
+        </a>
+    </div>
 @endsection

@@ -4,7 +4,6 @@
 @section('content')
 <style>
         .hero-bg {
-            
             background-image: url('{{ asset('images/customer.jpg') }}') !important;
         }
     </style>
@@ -43,4 +42,10 @@
     Already have an account? 
     <a href="{{ route('login') }}" style="color: var(--color-primary);">Sign In</a> 
     </p>
+
+    <div style="text-align: center; margin-top: 15px;">
+        <a href="{{ url('/') }}" style="text-decoration: none; color: #666;">
+            &larr; Back to Home
+        </a>
+    </div>
 @endsection
